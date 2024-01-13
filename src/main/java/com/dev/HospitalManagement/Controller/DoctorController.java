@@ -2,12 +2,14 @@ package com.dev.HospitalManagement.Controller;
 
 
 import com.dev.HospitalManagement.Entity.Doctor;
+import com.dev.HospitalManagement.Entity.SliderImage;
 import com.dev.HospitalManagement.Exception.DoctorNotFoundException;
 import com.dev.HospitalManagement.Service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.print.Doc;
 import java.util.List;
@@ -47,6 +49,21 @@ public class DoctorController {
         return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
 
+    @PostMapping("/addSliderImage")
+    public ResponseEntity<String> addSliderImage(@RequestParam("file")MultipartFile file){
+        try{
+            doctorService.saveSliderImage(file);
+            return new ResponseEntity<>("Slider Image uploaded succcessfully",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Failed to upload slider image",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/allSliderImages")
+    public ResponseEntity<List<SliderImage>> getAllSliderImages() {
+        List<SliderImage> sliderImages = doctorService.getAllSliderImages();
+        return new ResponseEntity<>(sliderImages, HttpStatus.OK);
+    }
 
 
 }
